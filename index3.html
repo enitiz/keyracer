@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<! This is client I guess....>
+<! This is it I guess....>
 <html>
     <head>
         <title>Keyracer Demo!</title>
@@ -24,6 +24,7 @@
         document.getElementById("saveButton").onclick = registerPlayer;
         
         var myname, mycolor, myposition, charList, game_context;
+        var bestname, bestcolor, bestposition, bestxloc, bestyloc;
         var fbleader = new Firebase("https://vivid-heat-4757.firebaseio.com/");
         
         function registerPlayer() {
@@ -45,7 +46,14 @@
         
         function boardInit() {   
             
-            fbleader.once("value", function(snapshot){                
+            fbleader.once("value", function(snapshot){
+                var val =  snapshot.val();
+                bestname = val.bestname;
+                bestcolor = val.bestcolor;
+                bestposition = val.bestposition;
+                bestxloc = val.bestxloc;
+                bestyloc = val.bestyloc;
+                
                 charList = val.text001.substring(0, 320);
                 
                 game_context = document.getElementById("game_canvas").getContext("2d");
@@ -137,7 +145,7 @@
         }, false);
         
         // Update our board as leaders change
-        fbleader.on("child_changed", function(snapshot) {
+        fbleader.on("value", function(snapshot) {
             var val = snapshot.val();
             
             if(val.won === true) {
@@ -151,13 +159,14 @@
             bestxloc = val.bestxloc;
             bestyloc = val.bestyloc;
             
-            if(bestname === myname)) {
+            if(!(bestname === myname) && game_context != null) {
                 game_context.fillStyle = bestcolor;
                 game_context.fillRect(xloc, yloc, 24, 24);
             }
         });
         
         function game_stop() {
+            // Major snafu here! You need a human moderator for now. :)
             fbleader.update({
                 bestcolor: "",
                 bestname: "",
@@ -166,6 +175,7 @@
                 bestyloc: "",
                 won: false
             });
+            location.reload(true);
         }
     
     </script>
