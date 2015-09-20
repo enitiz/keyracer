@@ -18,6 +18,7 @@
             game_context = document.getElementById("game_canvas").getContext("2d");
             game_context = game_grid_generate(game_context);
             game_context = game_grid_fill_text(game_context, text);
+            game_context = game_cursor_move_test(game_context);
         }
 
         function game_grid_generate(game_context) {        
@@ -50,27 +51,14 @@
             return game_context;
         }
         
-        /*function fillWrappedText(context, text, x, y) {
-            context.font = "18px Monospace";
-
-            var words = text.split(' ');
-            var line = '';
-            for(var index = 0; index < words.length; index++) {
-                var currentLine = line + words[index] + ' ';
-                var currentWidth = context.measureText(currentLine).width;
-                if(currentWidth > 760 && index > 0) {
-                    context.fillText(line, x, y);
-                    line = words[index] + ' ';
-                    y += 30;
+        function game_cursor_move_test(game_context) {
+            
+            game_context.fillStyle = "rgba(0, 255, 0, 0.2)";
+            for(var y = 1; y < 501; y += 50) {
+                for(var x = 1; x < 801; x += 25) {
+                    game_context.fillRect(x, y, 24, 24);
                 }
-                else
-                    line = currentLine;
             }
-            context.fillText(line, x, y);
-        }
-        */
-        function setupPlayer(text) {
-               
         }
         
     </script>
