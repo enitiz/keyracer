@@ -33,7 +33,7 @@ function boardInit() {
         bestxloc = val.bestxloc;
         bestyloc = val.bestyloc;
 
-        charList = val.text006.substring(0, 320);
+        charList = val.text001.substring(0, 320);
 
         game_context = document.getElementById("game_canvas").getContext("2d");
         game_grid_generate();
