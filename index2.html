@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Keyracer Demo!</title>
+    </head>
+    
+    <body onload="init();">
+        <p align="center">
+        <canvas id="game_canvas" width="801" height="501"/>
+        </p>
+    </body>
+    
+    <script type="text/javascript">         
+        var text = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?";
+        
+        function init() {
+            game_context = document.getElementById("game_canvas").getContext("2d");
+            game_context = game_grid_generate(game_context);
+            
+            //game_context = game_grid_fill(game_context, text);
+        }
+
+        function game_grid_generate(game_context) {        
+            for(var x = 0.5; x <= 801; x += 50) {
+                game_context.moveTo(x, 0);
+                game_context.lineTo(x, 500);
+            }
+            for(var y = 0.5; y <= 501; y += 50) {
+                game_context.moveTo(0, y);
+                game_context.lineTo(800, y);
+            }
+            game_context.strokeStyle = "#ddd";
+            game_context.stroke();
+            return game_context;
+        }
+        
+        /*
+        function game_grid_fill(game_context, text) {
+            game_context.font = "20px Monospace";
+            var charList = text.split('');
+            
+            int index = 0;
+            for(var y = 25; y < 501; y += 50) {
+                for(var x = 25; x < 801; x += 50) {
+                    game_context.moveTo(x, y);
+                    game_context.fillText(charList[index], x, y);
+                    index++;
+                    if(index > charList.length)
+                        return game_context;
+                }
+            }
+            return game_context;
+        }
+        */
+        
+        /*function fillWrappedText(context, text, x, y) {
+            context.font = "18px Monospace";
+
+            var words = text.split(' ');
+            var line = '';
+            for(var index = 0; index < words.length; index++) {
+                var currentLine = line + words[index] + ' ';
+                var currentWidth = context.measureText(currentLine).width;
+                if(currentWidth > 760 && index > 0) {
+                    context.fillText(line, x, y);
+                    line = words[index] + ' ';
+                    y += 30;
+                }
+                else
+                    line = currentLine;
+            }
+            context.fillText(line, x, y);
+        }
+        */
+        function setupPlayer(text) {
+               
+        }
+        
+    </script>
+    
+</html>
