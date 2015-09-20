@@ -7,12 +7,10 @@
     <body onload="init();">
         <p align="center">
         <canvas id="game_canvas" width="801" height="501"/>
-        <script>game_start();</script>
         </p>
     </body>
     
     <script type="text/javascript">
-        
         
         var input = "There's quite a bit of code here but in a nutshell it just creates a new DOM element that will be positioned on top of the editor to represent cursor position. Then we just initialize some defaults (start and end of the selection). There's quite a bit of code here but in a nutshell it just creates a new DOM element that will be positioned on top of the editor to represent cursor position. Then we just initialize some defaults (start and end of the selection).";
 
@@ -20,9 +18,10 @@
         function init() {
             charList = input.substring(0, 320);
             cursorColor = "rgba(0, 255, 0, 0.2)";
-            document.getElementById("game_canvas").getContext("2d");
+            game_context = document.getElementById("game_canvas").getContext("2d");
             game_grid_generate();
             game_grid_fill_text();
+            window_firstbox_fill();
         }
 
         function game_grid_generate() {        
@@ -50,45 +49,37 @@
             }
         }   
         
-        function game_start() {
+
+        // To keep track of where we are
+        var pos = 0, xloc = 1, yloc = 1;
             
-            // Color the first box
-            var transparent = "rgba(0, 0, 0, 0)";
-            game_context.fillStyle = cursorColor;
-            game_context.fillRect(1, 1, 24, 24);
-            
-            // To keep track of where we are
-            var index = 0, x = 1, y = 1;
-            
-            // Gets keypress event from window
-            window.addEventListener("keypress", function(e) {
-                // Checks what user typed
-                    
-                // If correct key is pressed
-                if(e.keyCode == charList[index].keyCode) {
-                        index++;
-                            
-                // Clear current block
-                game_context.fillStyle = transparent;
-                game_context.fillRect(x, y, 24, 24);
+        // Gets keypress event from window
+        window.addEventListener("keypress", function(e) {
+            // Checks what user typed
                 
-                /*
-                // Position to next block
-                x = x + 25;
-                if(x > 800) {
-                    x = 1;
-                    y = y + 50;
-                }
-                    
-                // Fill the new block
+            // If correct key is pressed
+            if(e.charCode == charList.charCodeAt(pos)) {
+                
+                // Fill the current block
                 game_context.fillStyle = cursorColor;
-                game_context.fillRect(x, y, 24, 24);
-                */
+                game_context.fillRect(xloc, yloc, 24, 24);
+                
+                pos++;
+                if(pos == charList.length) {
+                    window.removeEventListener;
+                    return;
                 }
                 
-                // Else do nothing
-            }, false);
-        }
+                // Position to next block
+                xloc = xloc + 25;
+                if(xloc > 800) {
+                    xloc = 1;
+                    yloc = yloc + 50;
+                }
+            }
+                
+            // Else do nothing
+        }, false);
         
     </script>
     
