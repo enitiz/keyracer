@@ -11,9 +11,10 @@
     </body>
     
     <script type="text/javascript">         
-        var text = "There's quite a bit of code here but in a nutshell it just creates a new DOM element that will be positioned on top of the editor to represent cursor position. Then we just initialize some defaults (start and end of the selection).";
+        var input = "There's quite a bit of code here but in a nutshell it just creates a new DOM element that will be positioned on top of the editor to represent cursor position. Then we just initialize some defaults (start and end of the selection). There's quite a bit of code here but in a nutshell it just creates a new DOM element that will be positioned on top of the editor to represent cursor position. Then we just initialize some defaults (start and end of the selection).";
         
         function init() {
+            var text = input.substring(0, 320);
             game_context = document.getElementById("game_canvas").getContext("2d");
             game_context = game_grid_generate(game_context);
             game_context = game_grid_fill(game_context, text);
