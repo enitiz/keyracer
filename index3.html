@@ -12,8 +12,7 @@
             <div id="winner"></div>
             <br>
             <input type="text" id="nameInput" placeholder="Your Name">
-            <input type="button" id="saveButton" value="Save" />
-            <h3 id="playername"></h3>
+            <input type="button" id="saveButton" value="Start" />
             <br><br>
             <canvas id="game_canvas" width="801" height="501"/>
         </div>
@@ -25,7 +24,8 @@
         document.getElementById("saveButton").onclick = registerPlayer;
         
         var myname, mycolor, myposition, charList, game_context;
-        var fbin, fbout;
+        var bestname, bestcolor, bestposition;
+        var fbleader;
         
         function registerPlayer() {
             myname = document.getElementById("nameInput").value;
@@ -38,32 +38,24 @@
             
             myposition = 0;
             
-            document.getElementById("nameInput").style.visibility = 'hidden';
-            document.getElementById("saveButton").style.visibility = 'hidden';
-            
-            document.getElementById("playername").innerHTML = myname;
-            alert(document.getElementById("playername").innerHTML);
-            
-            
-            
-            fbout = new Firebase("https://vivid-heat-4757.firebaseio.com/".concat(myname));
-            fbout.set({
-                name: myname,
-                color: mycolor,
-                position: myposition
-            });
+            document.getElementById("nameInput").disabled = true;
+            document.getElementById("saveButton").disabled = true;
             
             boardInit(mycolor);
         }
         
         function boardInit() {
-            fbin = new Firebase("https://vivid-heat-4757.firebaseio.com/");        
-            fbin.on("value", function(snapshot){
+            
+            fbleader = new Firebase("https://vivid-heat-4757.firebaseio.com/");        
+            
+            fbleader.on("value", function(snapshot){
                 charList = snapshot.val().text001.substring(0, 320);
                 game_context = document.getElementById("game_canvas").getContext("2d");
                 game_grid_generate();
                 game_grid_fill_text(); 
+                game_get_best();
             });
+            
         }
         
         function game_grid_generate() {        
@@ -93,6 +85,15 @@
             }
         }
         
+        function game_get_best() {
+            fbleader.on("value", function(snapshot) {
+                var val = snapshot.val();
+                bestname = val.bestname;
+                bestcolor = val.bestcolor;
+                bestposition = val.bestposition;
+            });
+        }
+        
         // To keep track of where we are
         var xloc = 1, yloc = 1;
             
@@ -112,9 +113,23 @@
                 game_context.fillRect(xloc, yloc, 24, 24);
                 
                 myposition++;
+                
+                // Add to best if really the best
+                if(myposition > bestposition) {
+                    fbleader.update({
+                        bestcolor: mycolor,
+                        bestname: myname,
+                        bestposition: myposition
+                    });
+                }
+                
                 if(myposition == charList.length) {
-                    window.removeEventListener;
-                    alert("Game finished!");
+                    fbleader.update({
+                        bestcolor: mycolor,
+                        bestname: myname,
+                        bestposition: myposition,
+                        won: true
+                    });
                     return;
                 }
                 
@@ -128,7 +143,6 @@
                 
             // Else do nothing
         }, false);
-        
     
     </script>
     
