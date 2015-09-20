@@ -17,7 +17,7 @@
             var text = input.substring(0, 320);
             game_context = document.getElementById("game_canvas").getContext("2d");
             game_context = game_grid_generate(game_context);
-            game_context = game_grid_fill(game_context, text);
+            game_context = game_grid_fill_text(game_context, text);
         }
 
         function game_grid_generate(game_context) {        
@@ -34,7 +34,7 @@
             return game_context;
         }
         
-        function game_grid_fill(game_context, text) {
+        function game_grid_fill_text(game_context, text) {
             game_context.font = "16px Monospace";
             game_context.textAlign = "center";
             var charList = text.split('');
@@ -44,8 +44,6 @@
                 for(var x = 13; x < 801; x += 25) {
                     game_context.fillText(charList[index], x, y);
                     index++;
-                    if(index == charList.length)
-                        return game_context;
                 }
             }
             
