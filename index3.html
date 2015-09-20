@@ -9,11 +9,12 @@
     <body>
         <div align="center">
             <h2>Keyracer alpha</h2>
-            <div id="winner"></div>
             <br>
             <input type="text" id="nameInput" placeholder="Your Name">
             <input type="button" id="saveButton" value="Start" />
-            <br><br>
+            <br>
+            <p id="status">Stamp your name and get going!</p>
+            <br>
             <canvas id="game_canvas" width="801" height="501"/>
         </div>
         
@@ -41,13 +42,15 @@
             document.getElementById("nameInput").disabled = true;
             document.getElementById("saveButton").disabled = true;
             
-            boardInit(mycolor);
+            document.getElementById("status").innerHTML = "Game has started! Type type type!!!";
+            
+            boardInit();
         }
         
         function boardInit() {   
-            
             fbleader.once("value", function(snapshot){
                 var val =  snapshot.val();
+                
                 bestname = val.bestname;
                 bestcolor = val.bestcolor;
                 bestposition = val.bestposition;
@@ -96,11 +99,10 @@
         // Gets keypress event from window
         window.addEventListener("keypress", function(e) {
             // Do nothing if canvas is not set up
-            if(charList == null)
+            if(!charList)
                 return;
             
             // Checks what user typed
-                
             // If correct key is pressed
             if(e.charCode == charList.charCodeAt(myposition)) {
                 
@@ -148,25 +150,31 @@
         fbleader.on("value", function(snapshot) {
             var val = snapshot.val();
             
-            if(val.won === true) {
+            if(val.won == true) {
                 alert(val.bestname.concat(" wins!"));
                 game_stop();
             }
             
-            bestcolor = val.bestcolor;
-            bestname = val.bestname;
-            bestposition = val.bestposition;
-            bestxloc = val.bestxloc;
-            bestyloc = val.bestyloc;
-            
-            if(!(bestname === myname) && game_context != null) {
-                game_context.fillStyle = bestcolor;
-                game_context.fillRect(bestxloc, bestyloc, 24, 24);
+            if(val.bestposition > 0) {
+                bestcolor = val.bestcolor;
+                bestname = val.bestname;
+                bestposition = val.bestposition;
+                bestxloc = val.bestxloc;
+                bestyloc = val.bestyloc;
+                
+                document.getElementById("status").innerHTML = bestname.concat(" is leading!");
+
+                if(!(bestname === myname) && game_context != null) {
+                    game_context.fillStyle = bestcolor;
+                    game_context.fillRect(bestxloc, bestyloc, 24, 24);
+                }
             }
+            
         });
         
         function game_stop() {
             // Major snafu here! You need a human moderator for now. :)
+            
             fbleader.update({
                 bestcolor: "",
                 bestname: "",
@@ -175,6 +183,13 @@
                 bestyloc: 0,
                 won: false
             });
+            
+            bestcolor = "";
+            bestname= "";
+            bestposition = "";
+            bestxloc = "";
+            bestyloc = "";
+            
             location.reload(true);
         }
     
