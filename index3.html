@@ -13,48 +13,122 @@
             <br>
             <input type="text" id="nameInput" placeholder="Your Name">
             <input type="button" id="saveButton" value="Save" />
-            <br>
+            <h3 id="playername"></h3>
+            <br><br>
             <canvas id="game_canvas" width="801" height="501"/>
-            
         </div>
         
         
     </body>
     
     <script type="text/javascript">
-        var myFirebaseRef = new Firebase("https://vivid-heat-4757.firebaseio.com/");
-        
         document.getElementById("saveButton").onclick = registerPlayer;
         
+        var myname, mycolor, myposition, charList, game_context;
+        var fbin, fbout;
+        
         function registerPlayer() {
-            var myname = document.getElementById("nameInput").value;
+            myname = document.getElementById("nameInput").value;
+            
             var r = Math.floor((Math.random() * 255) + 1);
             var g = Math.floor((Math.random() * 255) + 1);
             var b = Math.floor((Math.random() * 255) + 1);
             var a = 0.2;
-            var mycolor = "rgba".concat("(", r, ", ", g, ", ", b, ", ", a, ")");
-            alert(mycolor);
+            mycolor = "rgba".concat("(", r, ", ", g, ", ", b, ", ", a, ")");
             
-            myFirebaseRef.push({
+            myposition = 0;
+            
+            document.getElementById("nameInput").style.visibility = 'hidden';
+            document.getElementById("saveButton").style.visibility = 'hidden';
+            
+            document.getElementById("playername").innerHTML = myname;
+            alert(document.getElementById("playername").innerHTML);
+            
+            
+            
+            fbout = new Firebase("https://vivid-heat-4757.firebaseio.com/".concat(myname));
+            fbout.set({
                 name: myname,
                 color: mycolor,
-                position: 0
+                position: myposition
             });
             
             boardInit(mycolor);
         }
         
-        var charList;
-        function boardInit(mycolor) {
-         
-            myFirebaseRef.on("value", function(snapshot){
+        function boardInit() {
+            fbin = new Firebase("https://vivid-heat-4757.firebaseio.com/");        
+            fbin.on("value", function(snapshot){
                 charList = snapshot.val().text001.substring(0, 320);
-                cursorColor = "rgba(0, 255, 0, 0.2)";
                 game_context = document.getElementById("game_canvas").getContext("2d");
                 game_grid_generate();
                 game_grid_fill_text(); 
             });
         }
+        
+        function game_grid_generate() {        
+            for(var x = 0.5; x <= 801; x += 25) {
+                game_context.moveTo(x, 0);
+                game_context.lineTo(x, 500);
+            }
+            for(var y = 0.5; y <= 501; y += 25) {
+                game_context.moveTo(0, y);
+                game_context.lineTo(800, y);
+            }
+            game_context.strokeStyle = "#ddd";
+            game_context.stroke();
+        }
+        
+        function game_grid_fill_text() {
+            game_context.font = "16px Monospace";
+            game_context.textAlign = "center";
+            var index = 0;
+            for(var y = 18; y < 501; y += 50) {
+                for(var x = 13; x < 801; x += 25) {
+                    game_context.fillText(charList[index], x, y);
+                    index++;
+                    if(index == charList.length)
+                        return;
+                }
+            }
+        }
+        
+        // To keep track of where we are
+        var xloc = 1, yloc = 1;
+            
+        // Gets keypress event from window
+        window.addEventListener("keypress", function(e) {
+            // Do nothing if canvas is not set up
+            if(charList == null)
+                return;
+            
+            // Checks what user typed
+                
+            // If correct key is pressed
+            if(e.charCode == charList.charCodeAt(myposition)) {
+                
+                // Fill the current block
+                game_context.fillStyle = mycolor;
+                game_context.fillRect(xloc, yloc, 24, 24);
+                
+                myposition++;
+                if(myposition == charList.length) {
+                    window.removeEventListener;
+                    alert("Game finished!");
+                    return;
+                }
+                
+                // Position to next block
+                xloc = xloc + 25;
+                if(xloc > 800) {
+                    xloc = 1;
+                    yloc = yloc + 50;
+                }
+            }
+                
+            // Else do nothing
+        }, false);
+        
     
     </script>
     
