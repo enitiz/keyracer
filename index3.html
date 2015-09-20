@@ -54,7 +54,7 @@
                 bestxloc = val.bestxloc;
                 bestyloc = val.bestyloc;
                 
-                charList = val.text001.substring(0, 320);
+                charList = val.text000.substring(0, 320);
                 
                 game_context = document.getElementById("game_canvas").getContext("2d");
                 game_grid_generate();
@@ -161,7 +161,7 @@
             
             if(!(bestname === myname) && game_context != null) {
                 game_context.fillStyle = bestcolor;
-                game_context.fillRect(xloc, yloc, 24, 24);
+                game_context.fillRect(bestxloc, bestyloc, 24, 24);
             }
         });
         
