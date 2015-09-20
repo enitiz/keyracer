@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<! This is client I guess....>
+<html>
+    <head>
+        <title>Keyracer Demo!</title>
+        <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    </head>
+    
+    <body>
+        <div align="center">
+            <h2>Keyracer alpha</h2>
+            <div id="winner"></div>
+            <br>
+            <input type="text" id="nameInput" placeholder="Your Name">
+            <input type="button" id="saveButton" value="Save" />
+            <br>
+            <canvas id="game_canvas" width="801" height="501"/>
+            
+        </div>
+        
+        
+    </body>
+    
+    <script type="text/javascript">
+        var myFirebaseRef = new Firebase("https://vivid-heat-4757.firebaseio.com/");
+        
+        document.getElementById("saveButton").onclick = registerPlayer;
+        
+        function registerPlayer() {
+            var myname = document.getElementById("nameInput").value;
+            var r = Math.floor((Math.random() * 255) + 1);
+            var g = Math.floor((Math.random() * 255) + 1);
+            var b = Math.floor((Math.random() * 255) + 1);
+            var a = 0.2;
+            var mycolor = "rgba".concat("(", r, ", ", g, ", ", b, ", ", a, ")");
+            alert(mycolor);
+            
+            myFirebaseRef.push({
+                name: myname,
+                color: mycolor,
+                position: 0
+            });
+            
+            boardInit(mycolor);
+        }
+        
+        var charList;
+        function boardInit(mycolor) {
+         
+            myFirebaseRef.on("value", function(snapshot){
+                charList = snapshot.val().text001.substring(0, 320);
+                cursorColor = "rgba(0, 255, 0, 0.2)";
+                game_context = document.getElementById("game_canvas").getContext("2d");
+                game_grid_generate();
+                game_grid_fill_text(); 
+            });
+        }
+    
+    </script>
+    
+</html>
