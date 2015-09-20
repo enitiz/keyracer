@@ -12,7 +12,7 @@
     
     <script type="text/javascript">
         
-        var input = "There's quite a bit of code here but in a nutshell it just creates a new DOM element that will be positioned on top of the editor to represent cursor position. Then we just initialize some defaults (start and end of the selection). There's quite a bit of code here but in a nutshell it just creates a new DOM element that will be positioned on top of the editor to represent cursor position. Then we just initialize some defaults (start and end of the selection).";
+        var input = "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
 
         var game_context, charList, cursorColor;
         function init() {
@@ -21,7 +21,6 @@
             game_context = document.getElementById("game_canvas").getContext("2d");
             game_grid_generate();
             game_grid_fill_text();
-            window_firstbox_fill();
         }
 
         function game_grid_generate() {        
@@ -45,6 +44,8 @@
                 for(var x = 13; x < 801; x += 25) {
                     game_context.fillText(charList[index], x, y);
                     index++;
+                    if(index == charList.length)
+                        return;
                 }
             }
         }   
@@ -67,6 +68,7 @@
                 pos++;
                 if(pos == charList.length) {
                     window.removeEventListener;
+                    alert("Game finished!");
                     return;
                 }
                 
