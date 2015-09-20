@@ -1,48 +1,25 @@
 <!DOCTYPE html>
+<! This is it I guess....>
 <html>
     <head>
         <title>Keyracer Demo!</title>
+        <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+        <link rel="stylesheet" href="custom.css">
+        <link rel="stylesheet" href="css/skeleton.css">
+        <link rel="stylesheet" href="css/normalize.css">
     </head>
     
-    <body onload="init();">
-        <p align="center">
-        <canvas id="game_canvas" width="800" height="500" style="border:1px solid #d3d3d3;"/>
-        </p>
+    <body>
+        <br><br>
+        <div id="main" align="center">
+            <h2>Keyracer</h2>
+            <input type="text" id="nameInput" placeholder="Your Name">
+            <input type="button" id="saveButton" value="Start" />
+            <br><br>
+            <p id="status">Stamp your name and get going!</p>
+            <br>
+            <canvas id="game_canvas" width="801" height="501"/>
+        </div>
     </body>
-    
-    <script type="text/javascript">
-        var text = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?";
-        
-        function init() {
-            game_canvas = document.getElementById("game_canvas");
-            game = game_canvas.getContext("2d");
-            fillWrappedText(game, text, 30, 30);
-            setupPlayer(text);
-        }
-        
-        function fillWrappedText(context, text, x, y) {
-            context.font = "18px Monospace";
-
-            var words = text.split(' ');
-            var line = '';
-            for(var index = 0; index < words.length; index++) {
-                var currentLine = line + words[index] + ' ';
-                var currentWidth = context.measureText(currentLine).width;
-                if(currentWidth > 760 && index > 0) {
-                    context.fillText(line, x, y);
-                    line = words[index] + ' ';
-                    y += 30;
-                }
-                else
-                    line = currentLine;
-            }
-            context.fillText(line, x, y);
-        }
-        
-        function setupPlayer(text) {
-               
-        }
-        
-    </script>
-    
+    <script type="text/javascript" src="./game.js"></script>
 </html>
